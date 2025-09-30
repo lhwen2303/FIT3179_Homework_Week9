@@ -1,0 +1,61 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Normalized State Populations Relative to National Total (2010-2025)",
+  "width": 800,
+  "height": 400,
+  "projection": {
+    "type": "equalEarth"
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/lhwen2303/FIT3179_Homework_Week9/main/ne_10m_admin_1_states_provinces.json",
+    "format": {
+      "type": "topojson",
+      "feature":
+      "ne_10m_admin_1_states_provinces"
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.properties.admin === 'Malaysia'"
+    },
+    {
+      "lookup": "properties.name",
+      "from": {
+        "data": {"url": "https://raw.githubusercontent.com/lhwen2303/FIT3179_Homework_Week9/main/population_overall_2010_2025.csv"
+        },
+        "key": "State",
+        "fields": ["normalized population", "population"]
+      }
+    }
+  ],
+  "mark": {
+    "type": "geoshape"
+  },
+  "encoding": {
+    "color": {
+      "field": "normalized population",
+      "type": "quantitative",
+      "scale": {
+        "range": ["#d0f0c0", "#006400"]
+      },
+      "legend": {
+        "title": "Normalized Population"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "properties.name",
+        "type": "nominal",
+        "title": "State"
+      },
+      {
+        "field": "population",
+        "type": "quantitative",
+        "title": "Population"
+      },
+      {
+        "field": "normalized population", 
+        "type": "quantitative", "title": "Population of State/National"}
+    ]
+  }
+}
